@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, DestroyAPIView, CreateAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -29,53 +30,17 @@ class CustomDeleteAPIView(DestroyAPIView):
         return self.model.objects.filter(id=self.kwargs.get('pk')).first()
 
 
-
-
-class tt(ModelViewSet):
+class DiaryModelViewSet(ModelViewSet):
+    serializer_class = DiarySerializer
     permission_classes = []
-    ...
-
-
-
-class DiaryGetView(CustomGetAPIView):
-    serializer_class = DiarySerializer
-    model = Diary
-
-
-class DiaryListView(ListAPIView):
-    serializer_class = DiarySerializer
     queryset = Diary.objects.all()
 
 
-class DiaryCreateView(CreateAPIView):
-    serializer_class = DiarySerializer
-
-
-class DiaryDeleteView(CustomDeleteAPIView):
-    serializer_class = DiarySerializer
-    model = Diary
-
-
-class NoteGetView(CustomGetAPIView):
+class NoteModelViewSet(ModelViewSet):
     serializer_class = NoteSerializer
-    model = Note
+    permission_classes = []
+    queryset = Note.objects.all()
 
-
-class NoteListView(ListAPIView):
-    paginate_by = 10
-    serializer_class = NoteSerializer
-    model = Note
-    lookup_url_kwarg = 'diary_id'
-    lookup_field = 'diary'
-
-    def get_queryset(self):
-        return self.model.objects.filter(diary_id=self.kwargs.get('diary_id'))
-
-
-class NoteCreateView(CreateAPIView):
-    serializer_class = NoteSerializer
-
-
-class NoteDeleteView(CustomDeleteAPIView):
-    serializer_class = NoteSerializer
-    model = Note
+    def list(self, request, *args, **kwargs):
+        self.queryset = self.queryset.filter(diary_id=self.kwargs.get('diary_id'))
+        return super().list(request, *args, **kwargs)

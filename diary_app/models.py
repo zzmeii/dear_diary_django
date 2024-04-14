@@ -16,6 +16,7 @@ class User(AbstractUser):
     is_active = None
     date_joined = None
     last_login = None
+    is_superuser = None
 
     USERNAME_FIELD = "login"
     REQUIRED_FIELDS = []
