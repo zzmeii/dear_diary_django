@@ -8,6 +8,8 @@ from rest_framework import status
 from django.urls import reverse
 
 
+
+
 class DiarySerializerTest(TestCase):
 
     def setUp(self):
@@ -28,12 +30,12 @@ class DiarySerializerTest(TestCase):
 class AuthenticationTest(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(login='testuser', password='12345')
+        self.user = User.objects.create_user(login='testuser@example.com', password='12345')
 
     def test_user_authentication(self):
-        url = reverse('token_obtain_pair')
+        url = reverse('rest_framework:login')
         data = {
-            'login': 'testuser',
+            'login': 'testuser@example.com',
             'password': '12345'
         }
         response = self.client.post(url, data, format='json')
@@ -42,7 +44,7 @@ class AuthenticationTest(APITestCase):
 
 class UserTest(TestCase):
     def test_user_str(self):
-        user = User.objects.create_user(login='testuser', password='testpassword')
+        user = User.objects.create_user(login='testuser@example.com', password='testpassword')
         self.assertEqual(str(user), 'testuser')
 
 
@@ -50,7 +52,7 @@ def create_test_users(count=100):
     # Creating 100 users
 
     for i in range(1, 101):
-        user = User.objects.create_user(login='testuser' + str(i), password='testpassword' + str(i))
+        user = User.objects.create_user(login='testuser' + str(i) + '@example.com', password='testpassword' + str(i))
         Diary.objects.create(title='Test Diary ' + str(i), expiration='2022-12-31T23:59:59Z', kind='1', user=user)
 
 

@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from rest_auth.views import LoginView
+
 from rest_framework.generics import ListAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAdminUser
 from rest_framework.status import HTTP_404_NOT_FOUND
@@ -10,7 +12,11 @@ from .models import Diary
 from .serializers import *
 
 
-# Create your views here.
+
+# class CustomLoginView(LoginView):
+#
+
+
 class CustomGetAPIView(APIView):
     model = None
     serializer_class = None
