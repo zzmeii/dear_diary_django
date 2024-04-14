@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from .managers import CustomUserManager
 # Create your models here.
 DIARY_KIND = (("0", "private"), ("1", "public"))
 
@@ -19,6 +19,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "login"
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.login

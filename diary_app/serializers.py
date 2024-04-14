@@ -1,13 +1,25 @@
 from rest_framework import serializers
+from .models import *
+
+from rest_framework import serializers
 
 
-class DiarySerializer(serializers.Serializer):
-    id =serializers.IntegerField(read_only=True)
-    title = serializers.CharField(required=True,allow_blank=False,max_length=256)
-    expiration = serializers.DateTimeField()
-    kind = models.CharField
-    user = models.OneToOneField
+class DiarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Diary
+        fields = ['id', 'title', 'expiration', 'kind', 'user']
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'login']
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ['id', 'diary', 'text']
 
 """
 Модель Diary:
