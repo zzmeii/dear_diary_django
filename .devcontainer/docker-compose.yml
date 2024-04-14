@@ -2,12 +2,21 @@ version: '3.8'
 
 services:
   app:
+    depends_on:
+      - db
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
 
     volumes:
       - ./media:/app/media
+
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
 
     ports:
       - "8000:8000"
@@ -24,6 +33,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:15432"
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
