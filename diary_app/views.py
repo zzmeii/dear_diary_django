@@ -23,3 +23,9 @@ class NoteModelViewSet(ModelViewSet):
     permission_classes = [NoteIsOwner]
     queryset = Note.objects.all()
     filter_fields = ('diary', 'text')
+
+    @action(detail=True, methods=['get'])
+    def notes_in_diary(self, request, diary_pk=None):
+        self.queryset = self.queryset.filter(diary_id=diary_pk)
+        return super().list(request)
+

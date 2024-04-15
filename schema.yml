@@ -320,6 +320,28 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/note/{id}/notes_in_diary/:
+    get:
+      operationId: api_note_notes_in_diary_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this note.
+        required: true
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
 components:
   schemas:
     Diary:
