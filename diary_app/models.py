@@ -33,7 +33,7 @@ class Diary(models.Model):
         verbose_name="Дата, после которой можно удалить дневник", null=True, blank=True
     )
     kind = models.CharField(
-        verbose_name="Тип дневника", choices=DIARY_KIND, db_default=0, max_length=1
+        verbose_name="Тип дневника", choices=DIARY_KIND, default='0', max_length=1
     )
     user = models.OneToOneField(
         User, verbose_name="Пользователь", on_delete=models.CASCADE

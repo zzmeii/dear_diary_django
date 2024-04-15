@@ -1,6 +1,46 @@
 version: '3.8'
 
 services:
+  beat:
+    command: [ 'python3', '-m' ,'celery' ,'-A' ,'diary_app', 'beat', '--loglevel=DEBUG' ]
+    depends_on:
+      - db
+      - redis
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ./media:/app/media
+
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      CELERY_BROKER_URL: 'redis://redis:6379/0'
+  celery:
+    command: [ 'python3', '-m' ,'celery' ,'-A' ,'diary_app', 'worker', '--loglevel=DEBUG' ]
+
+    depends_on:
+      - db
+      - redis
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ./media:/app/media
+
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      CELERY_BROKER_URL: 'redis://redis:6379/0'
+
   app:
     depends_on:
       - db
@@ -18,6 +58,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
+      CELERY_BROKER_URL: 'redis://redis:6379/0'
 
     ports:
       - "8000:8000"
@@ -47,9 +88,12 @@ services:
     ports:
       - "6379:6379"
     environment:
-      - REDIS_PASSWORD=password
-      - REDIS_PORT=6379
-      - REDIS_DATABASES=1
+      REDIS_PASSWORD: password
+      REDIS_PORT: 6379
+      REDIS_DATABASES: 1
+
+
+
 
 
 
